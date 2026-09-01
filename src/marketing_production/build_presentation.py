@@ -11,7 +11,7 @@ from marketing_production import deck
 from marketing_production.deck import brand_logo_html, footer_html, image_data_uri, pill_tag_html
 
 PRODUCT_NAME = "Autocall France Juillet 2018"
-OUTPUT_PATH = PROJECT_ROOT / "docs & output" / "Autocall_France_Juillet_2018.html"
+OUTPUT_PATH = PROJECT_ROOT / "HTML" / "Autocall_France_Juillet_2018.html"
 FOOTER_CLASSIFICATION = "Communication &agrave; caract&egrave;re promotionnel - R&eacute;serv&eacute; aux clients priv&eacute;s"
 PRODUCT_TERMS_IMAGE_PATH = PROJECT_ROOT / "src" / "marketing_production" / "assets" / "product_terms_snapshot.png"
 PRODUCT_REFERENCE_IMAGE_PATH = PROJECT_ROOT / "src" / "marketing_production" / "assets" / "product_reference_snapshot.png"

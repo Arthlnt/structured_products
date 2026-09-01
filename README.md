@@ -20,8 +20,9 @@ structured_products/
 │   ├── charts.py                           # graphiques SVG inline (non utilisés par défaut)
 │   ├── build_presentation.py               # assemblage des 12 slides et écriture du HTML final
 │   └── assets/                             # images PNG générées (graphiques + tableaux)
-├── docs & output/
+├── HTML/
 │   ├── Autocall_France_Juillet_2018.html   # Présentation finale HMTL
+├── docs/
 │   ├── logo-transparent.png / logo.png     # Logo de la société
 │   └── tsheet.pdf                          # Term sheet du produit
 │   └── Autocall_France_Juillet_2018.pdf    # Export présentation en PDF

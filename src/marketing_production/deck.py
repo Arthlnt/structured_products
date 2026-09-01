@@ -7,7 +7,7 @@ SLIDE_W = 1280
 SLIDE_H = 720
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-LOGO_PATH = PROJECT_ROOT / "logo-transparent.png"
+LOGO_PATH = PROJECT_ROOT / "docs" / "logo-transparent.png"
 
 
 def _logo_data_uri():
