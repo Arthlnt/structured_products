@@ -32,8 +32,7 @@ structured_products/
 
 Les notebooks sont numérotés dans leur ordre d'exécution ; chaque étape lit/écrit dans `data/reporting.xlsx` :
 
-1. **`notebooks/0_evaluation_date_calendar.ipynb`** — Concevoir la table des dates de constatation et de remboursement anticipé (minimum un an après l'émission, fréquence semestrielle).
-   - Le résultat est écrit dans l'excel reporting.xlsx page `Calendar`.
+1. **`notebooks/0_evaluation_date_calendar.ipynb`** — Concevoir la table des dates de constatation et de remboursement anticipé (minimum un an après l'émission, fréquence semestrielle). Le résultat est écrit dans l'excel reporting.xlsx page `Calendar`.
 2. **`notebooks/01_reporting_database.ipynb`** — Calculer à partir de la timesérie du sous-jacent l'ensemble des indicateurs de suivi du produit:
    - **Sous-jacent** : base 100, performance, drawdown, volatilité depuis l'émission, niveaux min/max ;
    - **Autocall** : niveau et distance de déclenchement, prochaine date d'observation, montant et coupon potentiels ;
