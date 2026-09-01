@@ -33,14 +33,12 @@ structured_products/
 Les notebooks sont numérotés dans leur ordre d'exécution ; chaque étape lit/écrit dans `data/reporting.xlsx` :
 
 1. **`notebooks/0_evaluation_date_calendar.ipynb`** — Concevoir la table des dates de constatation et de remboursement anticipé (minimum un an après l'émission, fréquence semestrielle).
-
-Le résultat est écrit dans l'excel reporting.xlsx page `Calendar`.
+   - Le résultat est écrit dans l'excel reporting.xlsx page `Calendar`.
 2. **`notebooks/01_reporting_database.ipynb`** — Calculer à partir de la timesérie du sous-jacent l'ensemble des indicateurs de suivi du produit:
    - **Sous-jacent** : base 100, performance, drawdown, volatilité depuis l'émission, niveaux min/max ;
    - **Autocall** : niveau et distance de déclenchement, prochaine date d'observation, montant et coupon potentiels ;
    - **Protection** : niveau et distance de la barrière de capital, niveau de protection du nominal.
-
-Le résultat est écrit dans l'excel reporting.xlsx page `Reporting`.
+   - Le résultat est écrit dans l'excel reporting.xlsx page `Reporting`.
 3. **`notebooks/02_reporting_elements.ipynb`** — Construire les graphiques (performance base 100 et drawdown du sous-jacent) et les tableaux de synthèse (sous-jacent, autocall, barrière de capital, suivi de l'autocall), puis exporter les images PNG dans `src/marketing_production/assets/`.
 4. **`src/marketing_production/0_product_terms_instrument.ipynb`** — Génèrer les tableaux statiques des termes du produit (émetteur, garant, sous-jacent, dates, niveaux de remboursement) issus de la termsheet, sous forme d'images PNG.
 5. **`notebooks/03_marketing_production.ipynb`** — Générer la présentation marketing avec mise à jour des tableaux / graphiques de reporting selon la date de reporting.
