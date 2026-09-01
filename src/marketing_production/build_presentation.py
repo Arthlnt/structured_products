@@ -1,26 +1,3 @@
-"""Builds the HTML slide presentation for "Autocall France Juillet 2018".
-
-This is a bare skeleton: cover slide, a section slide and one empty
-content slide built on the generic, reusable slide templates defined in
-``deck.py`` (two-panel layout, facts grid, bullet list, table, KPI
-grid...). No product data is wired in yet -- slide content will be
-filled in incrementally, one slide at a time.
-
-Usage from a notebook::
-
-    import sys
-    from pathlib import Path
-    sys.path.insert(0, str(Path.cwd() / "src"))
-    from marketing_production import build_presentation
-    build_presentation.generate()
-
-Or from the command line::
-
-    python src/marketing_production/build_presentation.py
-"""
-
-from __future__ import annotations
-
 import argparse
 import sys
 from pathlib import Path
@@ -30,11 +7,11 @@ SRC_DIR = PROJECT_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from marketing_production import deck  # noqa: E402
-from marketing_production.deck import brand_logo_html, footer_html, image_data_uri, pill_tag_html  # noqa: E402
+from marketing_production import deck
+from marketing_production.deck import brand_logo_html, footer_html, image_data_uri, pill_tag_html
 
 PRODUCT_NAME = "Autocall France Juillet 2018"
-OUTPUT_PATH = PROJECT_ROOT / "Autocall_France_Juillet_2018.html"
+OUTPUT_PATH = PROJECT_ROOT / "docs & output" / "Autocall_France_Juillet_2018.html"
 FOOTER_CLASSIFICATION = "Communication &agrave; caract&egrave;re promotionnel - R&eacute;serv&eacute; aux clients priv&eacute;s"
 PRODUCT_TERMS_IMAGE_PATH = PROJECT_ROOT / "src" / "marketing_production" / "assets" / "product_terms_snapshot.png"
 PRODUCT_REFERENCE_IMAGE_PATH = PROJECT_ROOT / "src" / "marketing_production" / "assets" / "product_reference_snapshot.png"
@@ -47,23 +24,25 @@ CAPITAL_BARRIER_SNAPSHOT_IMAGE_PATH = PROJECT_ROOT / "src" / "marketing_producti
 AUTOCALL_MONITORING_IMAGE_PATH = PROJECT_ROOT / "src" / "marketing_production" / "assets" / "autocall_monitoring_snapshot.png"
 
 
-def _footer_html(page_number: int) -> str:
+def _footer_html(page_number):
     return footer_html(page_number, FOOTER_CLASSIFICATION)
 
 
-def _build_cover_slide() -> str:
+def _build_cover_slide():
     return f"""
 <section class="slide slide-reference-cover active">
   <div class="reference-frame"></div>
   <div class="reference-logo-plate">
     {brand_logo_html("lg")}
   </div>
+  <p class="cover-kicker">Produit Structur&eacute; &middot; EMTN</p>
   <h1 class="reference-title">{PRODUCT_NAME}</h1>
+  <div class="cover-rule"></div>
 </section>
 """
 
 
-def _build_section_slide(number: int, title: str, page_number: int, title_style: str = "") -> str:
+def _build_section_slide(number, title, page_number, title_style=""):
     style_attr = f' style="{title_style}"' if title_style else ""
     return f"""
 <section class="slide slide-reference-section">
@@ -81,7 +60,7 @@ def _build_section_slide(number: int, title: str, page_number: int, title_style:
 """
 
 
-def _build_product_terms_slide(page_number: int) -> str:
+def _build_product_terms_slide(page_number):
     product_terms_image_src = image_data_uri(PRODUCT_TERMS_IMAGE_PATH)
     product_reference_image_src = image_data_uri(PRODUCT_REFERENCE_IMAGE_PATH)
     return f"""
@@ -104,7 +83,7 @@ def _build_product_terms_slide(page_number: int) -> str:
 """
 
 
-def _build_underlying_performance_slide(page_number: int) -> str:
+def _build_underlying_performance_slide(page_number):
     underlying_performance_image_src = image_data_uri(UNDERLYING_PERFORMANCE_IMAGE_PATH)
     return f"""
 <section class="slide slide-content">
@@ -119,7 +98,7 @@ def _build_underlying_performance_slide(page_number: int) -> str:
 """
 
 
-def _build_product_dates_slide(page_number: int) -> str:
+def _build_product_dates_slide(page_number):
     product_dates_image_src = image_data_uri(PRODUCT_DATES_IMAGE_PATH)
     return f"""
 <section class="slide slide-content">
@@ -143,7 +122,7 @@ def _build_product_dates_slide(page_number: int) -> str:
 """
 
 
-def _build_final_redemption_scenarios_slide(page_number: int) -> str:
+def _build_final_redemption_scenarios_slide(page_number):
     return f"""
 <section class="slide slide-content">
   <div class="content-topbar">{pill_tag_html("03 &mdash; Sc&eacute;narios de Remboursement Final")}</div>
@@ -196,7 +175,7 @@ def _build_final_redemption_scenarios_slide(page_number: int) -> str:
 """
 
 
-def _build_risk_snapshot_slide(page_number: int) -> str:
+def _build_risk_snapshot_slide(page_number):
     drawdown_image_src = image_data_uri(DRAWDOWN_IMAGE_PATH)
     underlying_snapshot_image_src = image_data_uri(UNDERLYING_SNAPSHOT_IMAGE_PATH)
     return f"""
@@ -215,7 +194,7 @@ def _build_risk_snapshot_slide(page_number: int) -> str:
 """
 
 
-def _build_autocall_barrier_snapshot_slide(page_number: int) -> str:
+def _build_autocall_barrier_snapshot_slide(page_number):
     autocall_snapshot_image_src = image_data_uri(AUTOCALL_SNAPSHOT_IMAGE_PATH)
     capital_barrier_snapshot_image_src = image_data_uri(CAPITAL_BARRIER_SNAPSHOT_IMAGE_PATH)
     return f"""
@@ -234,7 +213,7 @@ def _build_autocall_barrier_snapshot_slide(page_number: int) -> str:
 """
 
 
-def _build_autocall_monitoring_slide(page_number: int) -> str:
+def _build_autocall_monitoring_slide(page_number):
     autocall_monitoring_image_src = image_data_uri(AUTOCALL_MONITORING_IMAGE_PATH)
     return f"""
 <section class="slide slide-content">
@@ -249,19 +228,14 @@ def _build_autocall_monitoring_slide(page_number: int) -> str:
 """
 
 
-def generate(output_path: str | Path | None = None, overwrite: bool = True) -> Path:
-    """Build the HTML slide deck skeleton and write it to
-    ``structured_products/Autocall_France_Juillet_2018.html``.
-
-    Regenerates by default (``overwrite=True``) since the file is a
-    generated artifact built up slide by slide; pass ``overwrite=False``
-    to leave an existing file untouched instead.
-    """
+def generate(output_path=None, overwrite=True):
     out_path = Path(output_path) if output_path is not None else OUTPUT_PATH
 
     if out_path.exists() and not overwrite:
         print(f"{out_path} existe deja -- non regenere (passer overwrite=True pour forcer).")
         return out_path
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
 
     slides = [
         _build_cover_slide(),
@@ -289,7 +263,7 @@ def generate(output_path: str | Path | None = None, overwrite: bool = True) -> P
     return out_path
 
 
-def _parse_args() -> argparse.Namespace:
+def _parse_args():
     parser = argparse.ArgumentParser(description=f"Build the {PRODUCT_NAME} HTML presentation.")
     parser.add_argument("--output-path", type=str, default=None)
     parser.add_argument("--no-overwrite", action="store_true", help="Leave an existing HTML file untouched.")

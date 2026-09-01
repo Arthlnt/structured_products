@@ -1,14 +1,3 @@
-"""Assembles slide HTML fragments into a single self-contained,
-offline-viewable, print-to-PDF-ready presentation file.
-
-Slides are laid out as fixed 1280x720 (16:9) pages stacked vertically,
-like a PDF preview in the browser. No external stylesheet or script is
-loaded (the brand logo is embedded as a base64 data URI), so the file
-works from disk with no network access.
-"""
-
-from __future__ import annotations
-
 import base64
 from pathlib import Path
 
@@ -21,14 +10,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 LOGO_PATH = PROJECT_ROOT / "logo-transparent.png"
 
 
-def _logo_data_uri() -> str:
+def _logo_data_uri():
     if not LOGO_PATH.exists():
         return ""
     encoded = base64.b64encode(LOGO_PATH.read_bytes()).decode("ascii")
     return f"data:image/png;base64,{encoded}"
 
 
-def image_data_uri(image_path: str | Path) -> str:
+def image_data_uri(image_path):
     path = Path(image_path)
     if not path.exists():
         raise FileNotFoundError(f"Image introuvable: {path}")
@@ -37,22 +26,16 @@ def image_data_uri(image_path: str | Path) -> str:
     return f"data:{mime_type};base64,{encoded}"
 
 
-def brand_logo_html(size: str = "lg") -> str:
-    """A logo placeholder ``<div>`` painted via a CSS background-image.
-
-    The base64-encoded logo is embedded exactly once, in the stylesheet
-    (see ``_css``), rather than once per ``<img src>`` -- with a logo
-    appearing in every slide's footer, repeating the data URI inline
-    would multiply the file size by the slide count."""
+def brand_logo_html(size="lg"):
     cls = "brand-logo brand-logo-lg" if size == "lg" else "brand-logo brand-logo-sm"
     return f'<div class="{cls}" role="img" aria-label="Logo"></div>'
 
 
-def pill_tag_html(text: str) -> str:
+def pill_tag_html(text):
     return f'<span class="pill-tag">{text}</span>'
 
 
-def footer_html(page_number: int, classification: str = "") -> str:
+def footer_html(page_number, classification=""):
     return (
         '<div class="reference-footer">'
         f'<span class="reference-footer-page">{page_number}</span>'
@@ -63,7 +46,7 @@ def footer_html(page_number: int, classification: str = "") -> str:
     )
 
 
-def _css() -> str:
+def _css():
     return f"""
 * {{ box-sizing: border-box; }}
 html, body {{
@@ -104,34 +87,43 @@ body {{
 }}
 .slide.active {{ display: flex; }}
 
-/* ---------- Brand logo (data URI embedded once, reused via class) ---------- */
 .brand-logo {{
   background: url("{_logo_data_uri()}") center / contain no-repeat;
 }}
-.brand-logo-lg {{ width: 190px; height: 110px; }}
+.brand-logo-lg {{ width: 320px; height: 104px; }}
 .brand-logo-sm {{ width: 96px; height: 40px; }}
 
-/* ---------- Cover & section title slides ---------- */
 .slide-reference-cover,
 .slide-reference-section {{ background: {BRAND["white"]}; position: relative; }}
+
 .reference-frame {{
   position: absolute; left: 44px; right: 44px; top: 101px; bottom: 44px;
-  border: 12px solid {BRAND["secondary"]};
+  border: 4px solid {BRAND["secondary"]};
 }}
+
 .reference-logo-plate {{
-  position: absolute; top: 28px; right: 162px; width: 222px; height: 128px;
-  background: {BRAND["white"]}; display: flex; flex-direction: column; align-items: flex-start;
-  justify-content: center; padding-left: 24px;
+  position: absolute; top: 150px; left: 0; right: 0; height: 104px;
+  display: flex; align-items: center; justify-content: center;
+}}
+.cover-kicker {{
+  position: absolute; left: 137px; right: 137px; top: 312px;
+  margin: 0; text-align: center; text-transform: uppercase; letter-spacing: 5px;
+  font-size: 13px; font-weight: 750; color: {BRAND["secondary"]}; opacity: 0.72;
 }}
 .reference-title {{
-  position: absolute; left: 137px; right: 137px; top: 329px;
-  margin: 0; font-size: 76px; font-weight: 850; line-height: 1.02;
-  letter-spacing: 0; color: {BRAND["primary"]};
-  text-align: center;
+  position: absolute; left: 137px; right: 137px; top: 355px;
+  margin: 0; font-size: 76px; font-weight: 850; line-height: 1.05;
+  letter-spacing: -0.5px; text-align: center; color: {BRAND["secondary"]};
+}}
+.cover-rule {{
+  position: absolute; left: 50%; top: 465px; transform: translateX(-50%);
+  width: 140px; height: 3px; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, {BRAND["secondary"]}, transparent);
+  opacity: 0.65;
 }}
 .section-frame {{
   position: absolute; left: 51px; right: 42px; top: 134px; height: 407px;
-  border: 8px solid {BRAND["secondary"]};
+  border: 4px solid {BRAND["secondary"]};
 }}
 .section-number {{
   position: absolute; left: 176px; top: 255px;
@@ -159,7 +151,6 @@ body {{
 .reference-footer-rule {{ margin: 0 13px 0 0; }}
 .reference-footer-logo {{ position: absolute; right: 56px; bottom: 20px; }}
 
-/* ---------- Content slides ---------- */
 .slide-content {{ background: {BRAND["page_bg"]}; padding: 34px 64px 0; }}
 .product-terms-figure {{
   display: flex; flex-direction: column; align-items: center; gap: 16px;
@@ -180,7 +171,6 @@ body {{
 .slide-body {{ flex: 1; padding: 18px 0 14px; display: flex; gap: 24px; min-height: 0; }}
 .slide-body.stacked {{ display: block; padding-top: 24px; }}
 
-/* ---------- Generic two-panel layout ---------- */
 .panel-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex: 1; min-height: 0; }}
 .panel {{
   border: 1px solid {BRAND["border"]}; border-top: 3px solid {BRAND["secondary"]};
@@ -290,7 +280,7 @@ body {{
 """
 
 
-def _toolbar_html() -> str:
+def _toolbar_html():
     return (
         '<div class="deck-toolbar">'
         '<button id="pdf-export-button" class="pdf-export-button" type="button" '
@@ -299,7 +289,7 @@ def _toolbar_html() -> str:
     )
 
 
-def _pdf_export_script_html(document_title: str) -> str:
+def _pdf_export_script_html(document_title):
     safe_filename = "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in document_title).strip("_")
     return f"""
 <script>
@@ -317,9 +307,7 @@ def _pdf_export_script_html(document_title: str) -> str:
 """
 
 
-def build_deck_html(document_title: str, slides: list[str]) -> str:
-    """Wrap slide HTML fragments (each a full ``<section class="slide ...">``
-    block) into the complete standalone presentation document."""
+def build_deck_html(document_title, slides):
     slides_html = "\n".join(slides)
     toolbar_html = _toolbar_html()
     pdf_export_script_html = _pdf_export_script_html(document_title)

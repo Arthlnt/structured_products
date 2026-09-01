@@ -1,33 +1,14 @@
-"""Self-contained inline-SVG chart builders for the slide decks.
-
-No JavaScript charting library and no network dependency: every chart is
-plain SVG markup computed in Python, so the resulting HTML file opens
-offline and prints/exports to PDF exactly as it renders on screen (a
-hover-only tooltip would be invisible in the PDF, so every chart also
-carries visible direct labels; native ``<title>`` elements add an
-on-screen hover bonus).
-"""
-
-from __future__ import annotations
-
 import math
-from typing import Callable, Sequence
 
 from marketing_production.theme import INK
 
-Layer = tuple[str, str, Sequence[float]]  # (label, color, values in [0, 1])
 
-
-def _polar(cx: float, cy: float, r: float, angle_deg: float) -> tuple[float, float]:
+def _polar(cx, cy, r, angle_deg):
     rad = math.radians(angle_deg - 90.0)
     return cx + r * math.cos(rad), cy + r * math.sin(rad)
 
 
-def _pick_tick_indices(n: int, n_ticks: int) -> list[int]:
-    """Evenly-spaced label indices into a length-``n`` series, always
-    including the last point without ever placing two ticks close
-    enough to collide (the last auto-generated tick is replaced, not
-    supplemented, when it already sits near the end)."""
+def _pick_tick_indices(n, n_ticks):
     if n <= 1:
         return [0]
     step = max(1, round((n - 1) / (n_ticks - 1)))
@@ -41,15 +22,12 @@ def _pick_tick_indices(n: int, n_ticks: int) -> list[int]:
 
 
 def donut_svg(
-    segments: Sequence[tuple[str, float, str]],
-    size: int = 260,
-    hole_ratio: float = 0.62,
-    center_label: str = "",
-    center_sublabel: str = "",
-) -> str:
-    """A donut chart. ``segments`` is ``(label, value, color)``; values
-    need not sum to 1 (they are normalized). Slices carry a percentage
-    label directly (visible without hovering) plus a native tooltip."""
+    segments,
+    size=260,
+    hole_ratio=0.62,
+    center_label="",
+    center_sublabel="",
+):
     total = sum(max(value, 0.0) for _, value, _ in segments)
     cx = cy = size / 2
     outer_r = size / 2 - 4
@@ -100,25 +78,23 @@ def donut_svg(
 
 
 def stacked_area_svg(
-    x_labels: Sequence[str],
-    layers: Sequence[Layer],
-    width: int = 760,
-    height: int = 280,
-    y_ticks: Sequence[float] = (0.0, 0.25, 0.5, 0.75, 1.0),
-    y_fmt: Callable[[float], str] = lambda v: f"{v * 100:.0f}%",
-    n_x_ticks: int = 6,
-) -> str:
-    """Stacked area chart, layers drawn bottom-to-top in the given
-    order (a fixed categorical order, not resorted per frame)."""
+    x_labels,
+    layers,
+    width=760,
+    height=280,
+    y_ticks=(0.0, 0.25, 0.5, 0.75, 1.0),
+    y_fmt=lambda v: f"{v * 100:.0f}%",
+    n_x_ticks=6,
+):
     left, right, top, bottom = 46, 12, 14, 24
     plot_w = width - left - right
     plot_h = height - top - bottom
     n = len(x_labels)
 
-    def x_of(i: int) -> float:
+    def x_of(i):
         return left + (plot_w * i / (n - 1) if n > 1 else plot_w / 2)
 
-    def y_of(v: float) -> float:
+    def y_of(v):
         return top + plot_h * (1.0 - v)
 
     parts = [f'<svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img">']
@@ -160,18 +136,15 @@ def stacked_area_svg(
 
 
 def line_svg(
-    x_labels: Sequence[str],
-    values: Sequence[float],
-    color: str,
-    width: int = 760,
-    height: int = 240,
-    y_fmt: Callable[[float], str] = lambda v: f"{v:.0f}",
-    n_y_ticks: int = 4,
-    n_x_ticks: int = 6,
-) -> str:
-    """A single-series line chart with a soft fill and direct start/end
-    value labels (no legend box needed for one series -- the slide's
-    own heading names it)."""
+    x_labels,
+    values,
+    color,
+    width=760,
+    height=240,
+    y_fmt=lambda v: f"{v:.0f}",
+    n_y_ticks=4,
+    n_x_ticks=6,
+):
     left, right, top, bottom = 46, 12, 20, 24
     plot_w = width - left - right
     plot_h = height - top - bottom
@@ -181,10 +154,10 @@ def line_svg(
     pad = (v_max - v_min) * 0.12 or max(abs(v_max), 1.0) * 0.05
     v_min, v_max = v_min - pad, v_max + pad
 
-    def x_of(i: int) -> float:
+    def x_of(i):
         return left + (plot_w * i / (n - 1) if n > 1 else plot_w / 2)
 
-    def y_of(v: float) -> float:
+    def y_of(v):
         return top + plot_h * (1.0 - (v - v_min) / (v_max - v_min))
 
     parts = [f'<svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img">']
