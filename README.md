@@ -21,7 +21,7 @@ structured_products/
 │   ├── build_presentation.py               # assemblage des 12 slides et écriture du HTML final
 │   └── assets/                             # images PNG générées (graphiques + tableaux)
 ├── HTML/
-│   ├── Autocall_France_Juillet_2018.html   # Présentation finale HMTL
+│   ├── Autocall_France_Juillet_2018.html   # Présentation finale HTML
 ├── docs/
 │   ├── logo-transparent.png / logo.png     # Logo de la société
 │   └── tsheet.pdf                          # Term sheet du produit
