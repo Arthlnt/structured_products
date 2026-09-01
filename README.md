@@ -2,6 +2,8 @@
 
 Chaîne de production (calcul, reporting et présentation marketing) **Autocall France Juillet 2018**. Les données historiques sont fictives. Ce projet vise à démontrer la construction de slides automatisés avec mise à jour des données sur le produit. Visualisation de la présentation en format .HTML et en .PDF apprès exportation.
 
+Open the Marketing Production HTML : https://arthlnt.github.io/structured_products/
+
 ## Structure du dépôt
 
 ```
