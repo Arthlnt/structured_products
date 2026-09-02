@@ -135,7 +135,7 @@ body {{
 }}
 .section-title {{
   position: absolute; left: 430px; right: 92px; top: 292px;
-  margin: 0; color: {BRAND["primary"]}; font-size: 76px; font-weight: 850;
+  margin: 0; color: {BRAND["secondary"]}; font-size: 76px; font-weight: 850;
   line-height: 1.02; letter-spacing: 0; text-align: center;
 }}
 .section-subtitle {{

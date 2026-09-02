@@ -125,8 +125,8 @@ def _build_product_dates_slide(page_number):
 def _build_final_redemption_scenarios_slide(page_number):
     return f"""
 <section class="slide slide-content">
-  <div class="content-topbar">{pill_tag_html("03 &mdash; Sc&eacute;narios de Remboursement Final")}</div>
-  <h2 class="content-title">Trois sc&eacute;narios possibles &agrave; la date de remboursement final</h2>
+  <div class="content-topbar">{pill_tag_html("03 &mdash; M&eacute;canismes de Remboursement Final")}</div>
+  <h2 class="content-title">Trois m&eacute;canismes possibles &agrave; la date de remboursement final</h2>
   <div class="slide-body stacked">
     <div class="panel-grid" style="grid-template-columns: 1fr 1fr 1fr; align-items: stretch;">
       <div class="panel" style="display: flex; flex-direction: column; min-height: 260px;">
@@ -243,7 +243,7 @@ def generate(output_path=None, overwrite=True):
         _build_product_terms_slide(page_number=3),
         _build_product_dates_slide(page_number=4),
         _build_section_slide(
-            2, "Sc&eacute;narios de remboursement final", page_number=5,
+            2, "M&eacute;canismes de remboursement final", page_number=5,
             title_style="font-size: 52px; line-height: 1.15; top: 276px;",
         ),
         _build_final_redemption_scenarios_slide(page_number=6),
